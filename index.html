@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lối Đi Ngôn Ngữ — Học Anh &amp; Trung</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F6F5F0;
+    --ink:#1C2333;
+    --ink-soft:#6B7284;
+    --card:#FFFFFF;
+    --line:#E8E5DC;
+    --brand:#1E9E77;
+    --brand-dark:#157A5C;
+    --brand-soft:#DFF3EA;
+    --en:#3457D5;
+    --en-soft:#E8ECFB;
+    --en-dark:#26409E;
+    --zh:#D8432E;
+    --zh-soft:#FBE8E4;
+    --zh-dark:#AE311F;
+    --gold:#F0A319;
+    --danger:#E5484D;
+    --danger-soft:#FBE4E4;
+    --radius-card:20px;
+    --radius-pill:999px;
+    --shadow-card:0 1px 0 rgba(28,35,51,.06), 0 10px 24px -16px rgba(28,35,51,.25);
+    --shadow-btn:0 3px 0 var(--btn-shade,#0000);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Inter",-apple-system,"Segoe UI","PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:"Baloo 2","Inter",sans-serif;
+    margin:0;
+  }
+  #app{max-width:520px;margin:0 auto;min-height:100vh;position:relative;padding-bottom:24px;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  .hidden{display:none!important;}
+
+  /* ---------- Top stat bar ---------- */
+  .statbar{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:14px 18px 10px;
+  }
+  .statbar .left{display:flex;align-items:center;gap:8px;}
+  .backbtn{
+    width:36px;height:36px;border-radius:var(--radius-pill);
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;color:var(--ink-soft);background:var(--card);
+    box-shadow:var(--shadow-card);
+  }
+  .pill{
+    display:flex;align-items:center;gap:5px;
+    background:var(--card);border-radius:var(--radius-pill);
+    padding:6px 12px;font-weight:700;font-size:14px;
+    box-shadow:var(--shadow-card);
+  }
+  .pill.streak{color:var(--gold);}
+  .pill.xp{color:var(--brand-dark);}
+  .stats-row{display:flex;gap:8px;}
+
+  /* ---------- Home ---------- */
+  .home-hero{padding:22px 22px 6px;}
+  .home-hero h1{font-size:26px;font-weight:700;line-height:1.25;color:var(--ink);}
+  .home-hero p{margin:8px 0 0;color:var(--ink-soft);font-size:15px;line-height:1.5;}
+  .course-list{padding:18px 18px 6px;display:flex;flex-direction:column;gap:16px;}
+  .course-card{
+    border-radius:var(--radius-card);
+    background:var(--card);
+    box-shadow:var(--shadow-card);
+    padding:20px;
+    display:flex;align-items:center;gap:16px;
+    border:2px solid transparent;
+    text-align:left;
+    transition:transform .12s ease;
+  }
+  .course-card:active{transform:scale(.98);}
+  .course-card.en{border-color:var(--en-soft);}
+  .course-card.zh{border-color:var(--zh-soft);}
+  .course-flag{
+    width:56px;height:56px;border-radius:16px;flex:none;
+    display:flex;align-items:center;justify-content:center;font-size:28px;
+  }
+  .course-card.en .course-flag{background:var(--en-soft);}
+  .course-card.zh .course-flag{background:var(--zh-soft);}
+  .course-body{flex:1;min-width:0;}
+  .course-body h3{font-size:18px;font-weight:700;}
+  .course-body p{margin:4px 0 0;font-size:13px;color:var(--ink-soft);}
+  .course-progress{margin-top:10px;height:8px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .course-progress i{display:block;height:100%;border-radius:99px;}
+  .course-card.en .course-progress i{background:var(--en);}
+  .course-card.zh .course-progress i{background:var(--zh);}
+  .chev{font-size:20px;color:var(--ink-soft);}
+
+  /* ---------- Path ---------- */
+  .course-switch{
+    display:flex;gap:8px;padding:6px 18px 4px;
+  }
+  .switch-btn{
+    flex:1;padding:9px 8px;border-radius:var(--radius-pill);
+    font-weight:700;font-size:13px;background:var(--card);color:var(--ink-soft);
+    box-shadow:var(--shadow-card);
+  }
+  .switch-btn.active.en{background:var(--en);color:#fff;}
+  .switch-btn.active.zh{background:var(--zh);color:#fff;}
+
+  .unit-banner{
+    margin:18px 16px 6px;
+    padding:14px 18px;
+    border-radius:16px;
+    color:#fff;
+  }
+  .unit-banner.en{background:var(--en);}
+  .unit-banner.zh{background:var(--zh);}
+  .unit-banner .eyebrow{font-size:12px;opacity:.85;font-weight:600;}
+  .unit-banner h2{font-size:18px;font-weight:700;margin-top:2px;}
+
+  .path{padding:14px 0 30px;position:relative;}
+  .node-row{display:flex;justify-content:center;margin:6px 0;}
+  .node{
+    width:64px;height:64px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    font-size:24px;font-weight:700;position:relative;
+    box-shadow:0 4px 0 rgba(0,0,0,.12);
+    border:none;
+  }
+  .node.locked{background:#E3E1D9;color:#B6B2A4;box-shadow:0 4px 0 #cfccc1;}
+  .node.available.en{background:var(--en);color:#fff;box-shadow:0 4px 0 var(--en-dark);}
+  .node.available.zh{background:var(--zh);color:#fff;box-shadow:0 4px 0 var(--zh-dark);}
+  .node.done.en{background:var(--brand-soft);color:var(--en-dark);box-shadow:0 4px 0 #b9e2ce;}
+  .node.done.zh{background:var(--brand-soft);color:var(--zh-dark);box-shadow:0 4px 0 #b9e2ce;}
+  .node.available{animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.06);}}
+  .node-label{
+    text-align:center;font-size:12px;color:var(--ink-soft);
+    margin-top:4px;max-width:110px;
+  }
+  .node-wrap{display:flex;flex-direction:column;align-items:center;}
+
+  /* ---------- Lesson ---------- */
+  .lesson-header{
+    display:flex;align-items:center;gap:12px;padding:14px 18px;
+  }
+  .progressbar{flex:1;height:14px;border-radius:99px;background:var(--line);overflow:hidden;}
+  .progressbar i{display:block;height:100%;border-radius:99px;background:var(--brand);transition:width .3s ease;}
+  .hearts{display:flex;gap:2px;font-size:16px;white-space:nowrap;}
+
+  .quiz-wrap{padding:8px 22px 140px;}
+  .quiz-wrap h2{font-size:20px;font-weight:700;line-height:1.4;margin-bottom:18px;}
+  .audio-btn{
+    display:flex;align-items:center;justify-content:center;gap:8px;
+    width:100%;padding:22px;margin-bottom:18px;
+    background:var(--en-soft);border-radius:16px;font-size:34px;
+  }
+  .audio-btn.zh{background:var(--zh-soft);}
+  .options{display:flex;flex-direction:column;gap:10px;}
+  .option-btn{
+    text-align:left;padding:14px 16px;border-radius:14px;
+    background:var(--card);border:2px solid var(--line);
+    font-size:16px;font-weight:600;color:var(--ink);
+    box-shadow:0 2px 0 var(--line);
+  }
+  .option-btn:active{transform:translateY(1px);}
+  .option-btn.selected{border-color:var(--ink-soft);}
+  .option-btn.correct{background:var(--brand-soft);border-color:var(--brand);color:var(--brand-dark);}
+  .option-btn.wrong{background:var(--danger-soft);border-color:var(--danger);color:#B32227;}
+  .option-btn[disabled]{opacity:.85;}
+
+  .feedback-bar{
+    position:fixed;left:0;right:0;bottom:0;
+    max-width:520px;margin:0 auto;
+    padding:16px 20px 20px;
+    border-top:2px solid var(--line);
+  }
+  .feedback-bar.correct{background:var(--brand-soft);border-color:#BEE7D5;}
+  .feedback-bar.wrong{background:var(--danger-soft);border-color:#F5C6C6;}
+  .feedback-bar .fb-top{display:flex;align-items:center;gap:10px;font-weight:700;margin-bottom:4px;}
+  .feedback-bar.correct .fb-top{color:var(--brand-dark);}
+  .feedback-bar.wrong .fb-top{color:#B32227;}
+  .feedback-bar .fb-answer{font-size:14px;color:var(--ink-soft);display:flex;align-items:center;gap:8px;}
+  .continue-btn{
+    display:block;width:100%;margin-top:12px;padding:14px;border-radius:14px;
+    font-weight:700;font-size:16px;color:#fff;background:var(--ink-soft);
+  }
+  .continue-btn.ready{background:var(--brand);box-shadow:0 3px 0 var(--brand-dark);}
+  .continue-btn.ready.wrong{background:var(--danger);box-shadow:0 3px 0 #B32227;}
+
+  .check-btn{
+    display:block;width:100%;padding:14px;border-radius:14px;
+    font-weight:700;font-size:16px;color:#fff;background:#D8D5C9;
+  }
+  .check-btn.ready{background:var(--brand);box-shadow:0 3px 0 var(--brand-dark);}
+  .bottom-fixed{
+    position:fixed;left:0;right:0;bottom:0;
+    max-width:520px;margin:0 auto;padding:14px 22px 20px;
+    background:linear-gradient(to top, var(--bg) 60%, transparent);
+  }
+
+  /* ---------- Summary / Fail ---------- */
+  .summary-wrap{padding:60px 30px 30px;text-align:center;}
+  .summary-wrap .big-emoji{font-size:64px;}
+  .summary-wrap h2{font-size:24px;margin-top:10px;}
+  .summary-wrap p{color:var(--ink-soft);margin-top:6px;}
+  .summary-stats{display:flex;gap:12px;justify-content:center;margin-top:26px;}
+  .sstat{
+    background:var(--card);border-radius:16px;box-shadow:var(--shadow-card);
+    padding:16px 18px;min-width:90px;
+  }
+  .sstat .n{font-family:"Baloo 2";font-size:22px;font-weight:700;}
+  .sstat .l{font-size:12px;color:var(--ink-soft);margin-top:2px;}
+  .primary-btn{
+    display:block;width:100%;margin-top:34px;padding:15px;border-radius:14px;
+    font-weight:700;font-size:16px;color:#fff;background:var(--brand);
+    box-shadow:0 3px 0 var(--brand-dark);
+  }
+  .ghost-btn{
+    display:block;width:100%;margin-top:12px;padding:14px;border-radius:14px;
+    font-weight:700;font-size:15px;color:var(--ink-soft);background:transparent;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ============================= DATA ============================= */
+const COURSES = {
+  en: {
+    name:"Tiếng Anh", flag:"🇬🇧", ttsLang:"en-US",
+    tagline:"Học từ vựng &amp; câu giao tiếp tiếng Anh cơ bản",
+    units:[
+      { title:"Chào hỏi & bản thân", lessons:[
+        { title:"Xin chào", vocab:[
+          {word:"hello",meaning:"xin chào"},{word:"goodbye",meaning:"tạm biệt"},
+          {word:"please",meaning:"làm ơn"},{word:"thank you",meaning:"cảm ơn"},
+          {word:"yes",meaning:"vâng / có"},{word:"no",meaning:"không"}]},
+        { title:"Tôi là...", vocab:[
+          {word:"I",meaning:"tôi"},{word:"you",meaning:"bạn"},
+          {word:"name",meaning:"tên"},{word:"friend",meaning:"bạn bè"},
+          {word:"teacher",meaning:"giáo viên"},{word:"student",meaning:"học sinh"}]},
+        { title:"Cảm xúc", vocab:[
+          {word:"happy",meaning:"vui"},{word:"sad",meaning:"buồn"},
+          {word:"tired",meaning:"mệt"},{word:"hungry",meaning:"đói"},
+          {word:"thirsty",meaning:"khát"},{word:"angry",meaning:"tức giận"}]},
+      ]},
+      { title:"Gia đình & con số", lessons:[
+        { title:"Gia đình", vocab:[
+          {word:"mother",meaning:"mẹ"},{word:"father",meaning:"bố"},
+          {word:"sister",meaning:"chị/em gái"},{word:"brother",meaning:"anh/em trai"},
+          {word:"family",meaning:"gia đình"},{word:"child",meaning:"đứa trẻ"}]},
+        { title:"Con số", vocab:[
+          {word:"one",meaning:"một"},{word:"two",meaning:"hai"},
+          {word:"three",meaning:"ba"},{word:"four",meaning:"bốn"},
+          {word:"five",meaning:"năm"},{word:"ten",meaning:"mười"}]},
+        { title:"Thời gian", vocab:[
+          {word:"today",meaning:"hôm nay"},{word:"tomorrow",meaning:"ngày mai"},
+          {word:"yesterday",meaning:"hôm qua"},{word:"morning",meaning:"buổi sáng"},
+          {word:"night",meaning:"buổi tối"},{word:"week",meaning:"tuần"}]},
+      ]},
+      { title:"Đồ ăn & sinh hoạt", lessons:[
+        { title:"Đồ ăn", vocab:[
+          {word:"rice",meaning:"cơm"},{word:"water",meaning:"nước"},
+          {word:"bread",meaning:"bánh mì"},{word:"fruit",meaning:"trái cây"},
+          {word:"coffee",meaning:"cà phê"},{word:"tea",meaning:"trà"}]},
+        { title:"Sinh hoạt hằng ngày", vocab:[
+          {word:"eat",meaning:"ăn"},{word:"drink",meaning:"uống"},
+          {word:"sleep",meaning:"ngủ"},{word:"work",meaning:"làm việc"},
+          {word:"study",meaning:"học"},{word:"play",meaning:"chơi"}]},
+        { title:"Nơi chốn", vocab:[
+          {word:"house",meaning:"nhà"},{word:"school",meaning:"trường học"},
+          {word:"city",meaning:"thành phố"},{word:"country",meaning:"đất nước"},
+          {word:"street",meaning:"đường phố"},{word:"market",meaning:"chợ"}]},
+      ]},
+    ]
+  },
+  zh: {
+    name:"Tiếng Trung", flag:"🇨🇳", ttsLang:"zh-CN",
+    tagline:"Học từ vựng &amp; phát âm tiếng Trung cơ bản",
+    units:[
+      { title:"Chào hỏi cơ bản", lessons:[
+        { title:"Xin chào", vocab:[
+          {word:"你好",pinyin:"nǐ hǎo",meaning:"xin chào"},{word:"再见",pinyin:"zài jiàn",meaning:"tạm biệt"},
+          {word:"谢谢",pinyin:"xiè xiè",meaning:"cảm ơn"},{word:"请",pinyin:"qǐng",meaning:"làm ơn / mời"},
+          {word:"是",pinyin:"shì",meaning:"là / vâng"},{word:"不",pinyin:"bù",meaning:"không"}]},
+        { title:"Tôi là...", vocab:[
+          {word:"我",pinyin:"wǒ",meaning:"tôi"},{word:"你",pinyin:"nǐ",meaning:"bạn"},
+          {word:"名字",pinyin:"míng zi",meaning:"tên"},{word:"朋友",pinyin:"péng yǒu",meaning:"bạn bè"},
+          {word:"老师",pinyin:"lǎo shī",meaning:"giáo viên"},{word:"学生",pinyin:"xué shēng",meaning:"học sinh"}]},
+        { title:"Cảm xúc", vocab:[
+          {word:"高兴",pinyin:"gāo xìng",meaning:"vui"},{word:"难过",pinyin:"nán guò",meaning:"buồn"},
+          {word:"累",pinyin:"lèi",meaning:"mệt"},{word:"饿",pinyin:"è",meaning:"đói"},
+          {word:"渴",pinyin:"kě",meaning:"khát"},{word:"生气",pinyin:"shēng qì",meaning:"tức giận"}]},
+      ]},
+      { title:"Số đếm & gia đình", lessons:[
+        { title:"Gia đình", vocab:[
+          {word:"妈妈",pinyin:"mā ma",meaning:"mẹ"},{word:"爸爸",pinyin:"bà ba",meaning:"bố"},
+          {word:"姐姐",pinyin:"jiě jie",meaning:"chị gái"},{word:"哥哥",pinyin:"gē ge",meaning:"anh trai"},
+          {word:"家",pinyin:"jiā",meaning:"nhà / gia đình"},{word:"孩子",pinyin:"hái zi",meaning:"đứa trẻ"}]},
+        { title:"Con số", vocab:[
+          {word:"一",pinyin:"yī",meaning:"một"},{word:"二",pinyin:"èr",meaning:"hai"},
+          {word:"三",pinyin:"sān",meaning:"ba"},{word:"四",pinyin:"sì",meaning:"bốn"},
+          {word:"五",pinyin:"wǔ",meaning:"năm"},{word:"十",pinyin:"shí",meaning:"mười"}]},
+        { title:"Thời gian", vocab:[
+          {word:"今天",pinyin:"jīn tiān",meaning:"hôm nay"},{word:"明天",pinyin:"míng tiān",meaning:"ngày mai"},
+          {word:"昨天",pinyin:"zuó tiān",meaning:"hôm qua"},{word:"早上",pinyin:"zǎo shang",meaning:"buổi sáng"},
+          {word:"晚上",pinyin:"wǎn shang",meaning:"buổi tối"},{word:"星期",pinyin:"xīng qī",meaning:"tuần"}]},
+      ]},
+      { title:"Đồ ăn & sinh hoạt", lessons:[
+        { title:"Đồ ăn", vocab:[
+          {word:"米饭",pinyin:"mǐ fàn",meaning:"cơm"},{word:"水",pinyin:"shuǐ",meaning:"nước"},
+          {word:"面包",pinyin:"miàn bāo",meaning:"bánh mì"},{word:"水果",pinyin:"shuǐ guǒ",meaning:"trái cây"},
+          {word:"咖啡",pinyin:"kā fēi",meaning:"cà phê"},{word:"茶",pinyin:"chá",meaning:"trà"}]},
+        { title:"Sinh hoạt hằng ngày", vocab:[
+          {word:"吃",pinyin:"chī",meaning:"ăn"},{word:"喝",pinyin:"hē",meaning:"uống"},
+          {word:"睡觉",pinyin:"shuì jiào",meaning:"ngủ"},{word:"工作",pinyin:"gōng zuò",meaning:"làm việc"},
+          {word:"学习",pinyin:"xué xí",meaning:"học"},{word:"玩",pinyin:"wán",meaning:"chơi"}]},
+        { title:"Nơi chốn", vocab:[
+          {word:"房子",pinyin:"fáng zi",meaning:"nhà"},{word:"学校",pinyin:"xué xiào",meaning:"trường học"},
+          {word:"城市",pinyin:"chéng shì",meaning:"thành phố"},{word:"国家",pinyin:"guó jiā",meaning:"đất nước"},
+          {word:"街",pinyin:"jiē",meaning:"đường phố"},{word:"市场",pinyin:"shì chǎng",meaning:"chợ"}]},
+      ]},
+    ]
+  }
+};
+
+/* ============================= STATE ============================= */
+let state = {
+  screen:'home',
+  courseId:null,
+  progress:{ xp:0, streak:0, lastPracticeDate:null, completed:{en:[],zh:[]} },
+  ref:{u:0,l:0},
+  session:null,
+};
+
+/* ============================= STORAGE ============================= */
+async function loadProgress(){
+  try{
+    const res = await window.storage.get('lingo_progress', false);
+    if(res && res.value){
+      const p = JSON.parse(res.value);
+      if(!p.completed) p.completed = {en:[],zh:[]};
+      if(!p.completed.en) p.completed.en=[];
+      if(!p.completed.zh) p.completed.zh=[];
+      return p;
+    }
+  }catch(e){ /* no saved progress / storage unavailable */ }
+  return { xp:0, streak:0, lastPracticeDate:null, completed:{en:[],zh:[]} };
+}
+async function saveProgress(){
+  try{ await window.storage.set('lingo_progress', JSON.stringify(state.progress), false); }
+  catch(e){ /* best effort, ignore */ }
+}
+
+/* ============================= HELPERS ============================= */
+function shuffle(arr){
+  const a=arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+function sampleN(arr,n){ return shuffle(arr).slice(0,n); }
+function allVocab(courseId){
+  const list=[];
+  COURSES[courseId].units.forEach(u=>u.lessons.forEach(l=>l.vocab.forEach(v=>list.push(v))));
+  return list;
+}
+function speak(text, lang){
+  try{
+    if(!('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang; u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  }catch(e){}
+}
+function isLessonDone(courseId,u,l){
+  return state.progress.completed[courseId].includes(u+'-'+l);
+}
+function isUnitDone(courseId,u){
+  const unit = COURSES[courseId].units[u];
+  return unit.lessons.every((_,l)=>isLessonDone(courseId,u,l));
+}
+function isLessonUnlocked(courseId,u,l){
+  if(u>0 && !isUnitDone(courseId,u-1)) return false;
+  if(l>0 && !isLessonDone(courseId,u,l-1)) return false;
+  return true;
+}
+function courseTotalLessons(courseId){
+  return COURSES[courseId].units.reduce((s,u)=>s+u.lessons.length,0);
+}
+function courseDoneLessons(courseId){
+  return state.progress.completed[courseId].length;
+}
+
+/* ============================= LESSON ENGINE ============================= */
+function buildLessonQuestions(courseId,u,l){
+  const course = COURSES[courseId];
+  const lesson = course.units[u].lessons[l];
+  const pool = allVocab(courseId);
+  const types = ['target','vn','listen'];
+  const qs = lesson.vocab.map((v,i)=>{
+    const type = types[i%3];
+    const distractors = sampleN(pool.filter(p=>p.word!==v.word),3);
+    let prompt, options, showAudioPrompt=false;
+    if(type==='target'){
+      prompt = 'Từ nào có nghĩa là "'+v.meaning+'"?';
+      options = shuffle([v,...distractors]).map(o=>({key:o.word,label:o.word+(o.pinyin?' ('+o.pinyin+')':'')}));
+    } else if(type==='vn'){
+      prompt = '"'+v.word+(v.pinyin?' ('+v.pinyin+')':'')+'" nghĩa là gì?';
+      options = shuffle([v,...distractors]).map(o=>({key:o.word,label:o.meaning}));
+    } else {
+      prompt = 'Nghe và chọn nghĩa đúng';
+      options = shuffle([v,...distractors]).map(o=>({key:o.word,label:o.meaning}));
+      showAudioPrompt = true;
+    }
+    return {type, prompt, options, correct:v.word, word:v.word, pinyin:v.pinyin||'', meaning:v.meaning, showAudioPrompt};
+  });
+  return shuffle(qs);
+}
+
+function startLesson(courseId,u,l){
+  state.courseId = courseId;
+  state.ref = {u,l};
+  state.session = {
+    questions: buildLessonQuestions(courseId,u,l),
+    idx:0, correctCount:0, wrongCount:0, hearts:5,
+    answered:false, selectedKey:null,
+  };
+  state.screen='lesson';
+  render();
+}
+
+function selectAnswer(idx){
+  const s = state.session;
+  if(s.answered) return;
+  const q = s.questions[s.idx];
+  const opt = q.options[idx];
+  s.answered = true;
+  s.selectedKey = opt.key;
+  if(opt.key===q.correct){ s.correctCount++; }
+  else { s.wrongCount++; s.hearts--; }
+  render();
+}
+
+function nextQuestion(){
+  const s = state.session;
+  if(s.hearts<=0){ state.screen='failed'; render(); return; }
+  s.idx++;
+  s.answered=false; s.selectedKey=null;
+  if(s.idx>=s.questions.length){
+    finishLesson();
+  } else {
+    render();
+  }
+}
+
+async function finishLesson(){
+  const s = state.session;
+  const {u,l} = state.ref;
+  const key = u+'-'+l;
+  const wasAlready = state.progress.completed[state.courseId].includes(key);
+  if(!wasAlready) state.progress.completed[state.courseId].push(key);
+  const perfect = s.wrongCount===0;
+  const xpGain = s.correctCount*10 + (perfect?20:0);
+  state.progress.xp += xpGain;
+  s.xpGain = xpGain; s.perfect = perfect;
+
+  const today = new Date().toDateString();
+  if(state.progress.lastPracticeDate!==today){
+    const yesterday = new Date(Date.now()-86400000).toDateString();
+    if(state.progress.lastPracticeDate===yesterday) state.progress.streak++;
+    else state.progress.streak = 1;
+    state.progress.lastPracticeDate = today;
+  }
+  await saveProgress();
+  state.screen='summary';
+  render();
+}
+
+function retryLesson(){
+  const {u,l} = state.ref;
+  startLesson(state.courseId,u,l);
+}
+
+function goHome(){ state.screen='home'; render(); }
+function goPath(courseId){ state.courseId = courseId || state.courseId; state.screen='path'; render(); }
+
+/* ============================= RENDER ============================= */
+function el(html){ const d=document.createElement('div'); d.innerHTML=html; return d.firstElementChild; }
+
+function renderStatbar(showBack, backFn){
+  return '<div class="statbar">'+
+    '<div class="left">'+
+      (showBack? '<button class="backbtn" id="backBtn">←</button>' : '<div style="width:36px"></div>') +
+    '</div>'+
+    '<div class="stats-row">'+
+      '<div class="pill streak">🔥 '+state.progress.streak+'</div>'+
+      '<div class="pill xp">⭐ '+state.progress.xp+'</div>'+
+    '</div>'+
+  '</div>';
+}
+
+function renderHome(){
+  const app = document.getElementById('app');
+  let html = renderStatbar(false);
+  html += '<div class="home-hero"><h1>Lối Đi Ngôn Ngữ 🗺️</h1><p>Học tiếng Anh và tiếng Trung mỗi ngày, từng bước một — kiểu Duolingo, nhưng là của riêng bạn.</p></div>';
+  html += '<div class="course-list">';
+  ['en','zh'].forEach(cid=>{
+    const c = COURSES[cid];
+    const total = courseTotalLessons(cid), done = courseDoneLessons(cid);
+    const pct = Math.round((done/total)*100);
+    html += '<button class="course-card '+cid+'" data-course="'+cid+'">'+
+      '<div class="course-flag">'+c.flag+'</div>'+
+      '<div class="course-body">'+
+        '<h3>'+c.name+'</h3>'+
+        '<p>'+c.tagline+'</p>'+
+        '<div class="course-progress"><i style="width:'+pct+'%"></i></div>'+
+      '</div>'+
+      '<div class="chev">›</div>'+
+    '</button>';
+  });
+  html += '</div>';
+  app.innerHTML = html;
+  app.querySelectorAll('[data-course]').forEach(btn=>{
+    btn.addEventListener('click',()=>goPath(btn.getAttribute('data-course')));
+  });
+}
+
+function renderPath(){
+  const app = document.getElementById('app');
+  const cid = state.courseId;
+  const course = COURSES[cid];
+  let html = renderStatbar(true);
+  html += '<div class="course-switch">';
+  ['en','zh'].forEach(c=>{
+    html += '<button class="switch-btn '+(c===cid?'active '+c:'')+'" data-switch="'+c+'">'+COURSES[c].flag+' '+COURSES[c].name+'</button>';
+  });
+  html += '</div>';
+
+  html += '<div class="path">';
+  const offsets = [0,54,80,54,0,-54,-80,-54];
+  let nodeCounter = 0;
+  course.units.forEach((unit,u)=>{
+    html += '<div class="unit-banner '+cid+'"><div class="eyebrow">Chặng '+(u+1)+'</div><h2>'+unit.title+'</h2></div>';
+    unit.lessons.forEach((lesson,l)=>{
+      const done = isLessonDone(cid,u,l);
+      const unlocked = isLessonUnlocked(cid,u,l);
+      const stateCls = done ? 'done' : (unlocked ? 'available' : 'locked');
+      const trackCls = (done||unlocked) ? cid : '';
+      const offset = offsets[nodeCounter % offsets.length];
+      nodeCounter++;
+      const icon = done ? '✓' : (unlocked ? (l+1) : '🔒');
+      html += '<div class="node-row" style="transform:translateX('+offset+'px)">'+
+        '<div class="node-wrap">'+
+          '<button class="node '+stateCls+' '+trackCls+'" '+(unlocked?('data-lesson="'+u+'-'+l+'"'):'disabled')+'>'+icon+'</button>'+
+          '<div class="node-label">'+lesson.title+'</div>'+
+        '</div>'+
+      '</div>';
+    });
+  });
+  html += '</div>';
+  app.innerHTML = html;
+
+  app.querySelector('#backBtn').addEventListener('click', goHome);
+  app.querySelectorAll('[data-switch]').forEach(btn=>{
+    btn.addEventListener('click',()=>goPath(btn.getAttribute('data-switch')));
+  });
+  app.querySelectorAll('[data-lesson]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const [u,l] = btn.getAttribute('data-lesson').split('-').map(Number);
+      startLesson(cid,u,l);
+    });
+  });
+}
+
+function renderLesson(){
+  const app = document.getElementById('app');
+  const cid = state.courseId;
+  const s = state.session;
+  const q = s.questions[s.idx];
+  const pct = Math.round((s.idx/s.questions.length)*100);
+
+  let html = '<div class="lesson-header">'+
+    '<button class="backbtn" id="exitBtn">✕</button>'+
+    '<div class="progressbar"><i style="width:'+pct+'%"></i></div>'+
+    '<div class="hearts">'+'❤️'.repeat(Math.max(s.hearts,0))+'🖤'.repeat(5-Math.max(s.hearts,0))+'</div>'+
+  '</div>';
+
+  html += '<div class="quiz-wrap">';
+  html += '<h2>'+q.prompt+'</h2>';
+  if(q.showAudioPrompt){
+    html += '<button class="audio-btn '+cid+'" id="speakBtn">🔊</button>';
+  }
+  html += '<div class="options">';
+  q.options.forEach((o,i)=>{
+    let cls='option-btn';
+    if(s.answered){
+      if(o.key===q.correct) cls+=' correct';
+      else if(o.key===s.selectedKey) cls+=' wrong';
+    }
+    html += '<button class="'+cls+'" data-idx="'+i+'" '+(s.answered?'disabled':'')+'>'+o.label+'</button>';
+  });
+  html += '</div></div>';
+
+  if(s.answered){
+    const isCorrect = s.selectedKey===q.correct;
+    html += '<div class="feedback-bar '+(isCorrect?'correct':'wrong')+'">'+
+      '<div class="fb-top">'+(isCorrect?'✅ Chính xác!':'❌ Chưa đúng')+'</div>'+
+      '<div class="fb-answer">Đáp án: <strong>'+q.word+(q.pinyin?' ('+q.pinyin+')':'')+'</strong> — '+q.meaning+
+        ' <button id="fbSpeak" style="font-size:16px">🔊</button></div>'+
+      '<button class="continue-btn ready '+(isCorrect?'':'wrong')+'" id="nextBtn">Tiếp tục</button>'+
+    '</div>';
+  }
+
+  app.innerHTML = html;
+
+  app.querySelector('#exitBtn').addEventListener('click', ()=>goPath(cid));
+  if(q.showAudioPrompt){
+    const b = app.querySelector('#speakBtn');
+    b.addEventListener('click',()=>speak(q.word, COURSES[cid].ttsLang));
+    speak(q.word, COURSES[cid].ttsLang);
+  }
+  if(!s.answered){
+    app.querySelectorAll('[data-idx]').forEach(btn=>{
+      btn.addEventListener('click',()=>selectAnswer(Number(btn.getAttribute('data-idx'))));
+    });
+  } else {
+    app.querySelector('#fbSpeak').addEventListener('click',()=>speak(q.word, COURSES[cid].ttsLang));
+    app.querySelector('#nextBtn').addEventListener('click', nextQuestion);
+  }
+}
+
+function renderSummary(){
+  const app = document.getElementById('app');
+  const s = state.session;
+  let html = '<div class="summary-wrap">';
+  html += '<div class="big-emoji">'+(s.perfect?'🏆':'🎉')+'</div>';
+  html += '<h2>'+(s.perfect?'Hoàn hảo!':'Hoàn thành bài học!')+'</h2>';
+  html += '<p>Bạn đã học xong bài "'+COURSES[state.courseId].units[state.ref.u].lessons[state.ref.l].title+'"</p>';
+  html += '<div class="summary-stats">'+
+    '<div class="sstat"><div class="n">+'+s.xpGain+'</div><div class="l">Điểm KN</div></div>'+
+    '<div class="sstat"><div class="n">'+s.correctCount+'/'+s.questions.length+'</div><div class="l">Đúng</div></div>'+
+    '<div class="sstat"><div class="n">🔥 '+state.progress.streak+'</div><div class="l">Chuỗi ngày</div></div>'+
+  '</div>';
+  html += '<button class="primary-btn" id="continueBtn">Tiếp tục học</button>';
+  html += '</div>';
+  app.innerHTML = html;
+  app.querySelector('#continueBtn').addEventListener('click', ()=>goPath(state.courseId));
+}
+
+function renderFailed(){
+  const app = document.getElementById('app');
+  let html = '<div class="summary-wrap">';
+  html += '<div class="big-emoji">💔</div>';
+  html += '<h2>Hết tim rồi!</h2>';
+  html += '<p>Đừng lo, thử lại bài học này để nhớ từ vựng chắc hơn nhé.</p>';
+  html += '<button class="primary-btn" id="retryBtn">Học lại bài này</button>';
+  html += '<button class="ghost-btn" id="backPathBtn">Về lối đi</button>';
+  html += '</div>';
+  app.innerHTML = html;
+  app.querySelector('#retryBtn').addEventListener('click', retryLesson);
+  app.querySelector('#backPathBtn').addEventListener('click', ()=>goPath(state.courseId));
+}
+
+function render(){
+  if(state.screen==='home') renderHome();
+  else if(state.screen==='path') renderPath();
+  else if(state.screen==='lesson') renderLesson();
+  else if(state.screen==='summary') renderSummary();
+  else if(state.screen==='failed') renderFailed();
+}
+
+/* ============================= INIT ============================= */
+(async function init(){
+  state.progress = await loadProgress();
+  render();
+})();
+</script>
+</body>
+</html>
