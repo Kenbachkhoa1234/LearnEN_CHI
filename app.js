@@ -1,100 +1,355 @@
 'use strict';
 
-const DATA = {
-  en:{name:'Tiếng Anh',flag:'🇬🇧',icon:'🔤',color:'#3f69dc',soft:'#e8eeff',tts:'en-US',desc:'Từ vựng và giao tiếp tiếng Anh theo tình huống.',units:[
-    unit('Nền tảng giao tiếp','Chào hỏi và giới thiệu bản thân',[
-      lesson('Chào hỏi','👋',[w('hello','xin chào'),w('goodbye','tạm biệt'),w('please','làm ơn'),w('thank you','cảm ơn'),w('sorry','xin lỗi')]),
-      lesson('Giới thiệu','🙋',[w('my name is','tên tôi là'),w('I am from','tôi đến từ'),w('nice to meet you','rất vui được gặp bạn'),w('friend','bạn bè'),w('student','học sinh')]),
-      lesson('Cảm xúc','😊',[w('happy','vui'),w('sad','buồn'),w('tired','mệt'),w('excited','hào hứng'),w('worried','lo lắng')]),
-      lesson('Câu hỏi cơ bản','❓',[w('what','cái gì'),w('where','ở đâu'),w('when','khi nào'),w('why','tại sao'),w('how','như thế nào')])]),
-    unit('Cuộc sống hằng ngày','Gia đình, thời gian và sinh hoạt',[
-      lesson('Gia đình','👨‍👩‍👧',[w('mother','mẹ'),w('father','bố'),w('sister','chị/em gái'),w('brother','anh/em trai'),w('family','gia đình')]),
-      lesson('Thời gian','⏰',[w('today','hôm nay'),w('tomorrow','ngày mai'),w('morning','buổi sáng'),w('afternoon','buổi chiều'),w('night','buổi tối')]),
-      lesson('Hoạt động','🏃',[w('eat','ăn'),w('drink','uống'),w('sleep','ngủ'),w('work','làm việc'),w('study','học')]),
-      lesson('Đồ ăn','🍜',[w('rice','cơm'),w('water','nước'),w('bread','bánh mì'),w('fruit','trái cây'),w('coffee','cà phê')])]),
-    unit('Đi ra ngoài','Địa điểm và tình huống thực tế',[
-      lesson('Nơi chốn','🏙️',[w('house','nhà'),w('school','trường học'),w('hospital','bệnh viện'),w('market','chợ'),w('station','nhà ga')]),
-      lesson('Di chuyển','🚌',[w('walk','đi bộ'),w('bus','xe buýt'),w('train','tàu hỏa'),w('turn left','rẽ trái'),w('turn right','rẽ phải')]),
-      lesson('Mua sắm','🛍️',[w('how much','bao nhiêu tiền'),w('cheap','rẻ'),w('expensive','đắt'),w('buy','mua'),w('cash','tiền mặt')]),
-      lesson('Khẩn cấp','🆘',[w('help','giúp đỡ'),w('doctor','bác sĩ'),w('police','cảnh sát'),w('danger','nguy hiểm'),w('call','gọi điện')])])]},
-  zh:{name:'Tiếng Trung',flag:'🇨🇳',icon:'汉',color:'#dc4c41',soft:'#ffebe8',tts:'zh-CN',desc:'Hán tự, pinyin và giao tiếp tiếng Trung cơ bản.',units:[
-    unit('Nền tảng giao tiếp','Chào hỏi và giới thiệu bản thân',[
-      lesson('Chào hỏi','👋',[z('你好','nǐ hǎo','xin chào'),z('再见','zài jiàn','tạm biệt'),z('谢谢','xiè xie','cảm ơn'),z('请','qǐng','làm ơn / mời'),z('对不起','duì bu qǐ','xin lỗi')]),
-      lesson('Giới thiệu','🙋',[z('我','wǒ','tôi'),z('你','nǐ','bạn'),z('名字','míng zi','tên'),z('朋友','péng you','bạn bè'),z('学生','xué sheng','học sinh')]),
-      lesson('Cảm xúc','😊',[z('高兴','gāo xìng','vui'),z('难过','nán guò','buồn'),z('累','lèi','mệt'),z('害怕','hài pà','sợ'),z('生气','shēng qì','tức giận')]),
-      lesson('Câu hỏi','❓',[z('什么','shén me','cái gì'),z('哪里','nǎ lǐ','ở đâu'),z('什么时候','shén me shí hou','khi nào'),z('为什么','wèi shén me','tại sao'),z('怎么','zěn me','như thế nào')])]),
-    unit('Cuộc sống hằng ngày','Gia đình, thời gian và sinh hoạt',[
-      lesson('Gia đình','👨‍👩‍👧',[z('妈妈','mā ma','mẹ'),z('爸爸','bà ba','bố'),z('姐姐','jiě jie','chị gái'),z('哥哥','gē ge','anh trai'),z('家','jiā','nhà / gia đình')]),
-      lesson('Thời gian','⏰',[z('今天','jīn tiān','hôm nay'),z('明天','míng tiān','ngày mai'),z('早上','zǎo shang','buổi sáng'),z('下午','xià wǔ','buổi chiều'),z('晚上','wǎn shang','buổi tối')]),
-      lesson('Hoạt động','🏃',[z('吃','chī','ăn'),z('喝','hē','uống'),z('睡觉','shuì jiào','ngủ'),z('工作','gōng zuò','làm việc'),z('学习','xué xí','học')]),
-      lesson('Đồ ăn','🍜',[z('米饭','mǐ fàn','cơm'),z('水','shuǐ','nước'),z('面包','miàn bāo','bánh mì'),z('水果','shuǐ guǒ','trái cây'),z('咖啡','kā fēi','cà phê')])]),
-    unit('Đi ra ngoài','Địa điểm và tình huống thực tế',[
-      lesson('Nơi chốn','🏙️',[z('家','jiā','nhà'),z('学校','xué xiào','trường học'),z('医院','yī yuàn','bệnh viện'),z('市场','shì chǎng','chợ'),z('车站','chē zhàn','nhà ga')]),
-      lesson('Di chuyển','🚌',[z('走路','zǒu lù','đi bộ'),z('公交车','gōng jiāo chē','xe buýt'),z('火车','huǒ chē','tàu hỏa'),z('左转','zuǒ zhuǎn','rẽ trái'),z('右转','yòu zhuǎn','rẽ phải')]),
-      lesson('Mua sắm','🛍️',[z('多少钱','duō shao qián','bao nhiêu tiền'),z('便宜','pián yi','rẻ'),z('贵','guì','đắt'),z('买','mǎi','mua'),z('现金','xiàn jīn','tiền mặt')]),
-      lesson('Khẩn cấp','🆘',[z('帮助','bāng zhù','giúp đỡ'),z('医生','yī shēng','bác sĩ'),z('警察','jǐng chá','cảnh sát'),z('危险','wēi xiǎn','nguy hiểm'),z('打电话','dǎ diàn huà','gọi điện')])])]},
-  vsl:{name:'Ký hiệu Việt Nam',flag:'🤟',icon:'👐',color:'#159b78',soft:'#ddf7ed',tts:null,desc:'Làm quen giao tiếp thị giác và ký hiệu nhập môn.',isSign:true,units:[
-    unit('Làm quen đúng cách','Văn hóa người Điếc và giao tiếp thị giác',[
-      lesson('Bắt đầu giao tiếp','👀',[s('Thu hút chú ý','Vẫy nhẹ trong tầm nhìn hoặc chạm nhẹ vào vai; không kéo hoặc giật người đối diện.'),s('Giao tiếp bằng mắt','Giữ ánh mắt tự nhiên để theo dõi nét mặt, hướng nhìn và chuyển động tay.'),s('Không gian ký hiệu','Giữ tay trong vùng dễ quan sát trước thân trên, không che khuôn mặt.'),s('Nét mặt','Nét mặt mang thông tin ngữ pháp và cảm xúc, không chỉ là biểu cảm phụ.'),s('Lần lượt','Chờ người kia kết thúc ý rồi mới bắt đầu ký hiệu.')]),
-      lesson('Chào hỏi','👋',[s('Xin chào','Đưa bàn tay mở trong tầm nhìn và vẫy nhẹ, kết hợp nét mặt thân thiện.'),s('Tạm biệt','Bàn tay mở hướng ra ngoài, khép mở các ngón nhẹ khi rời đi.'),s('Cảm ơn','Bàn tay mở gần cằm rồi đưa nhẹ ra phía trước.'),s('Xin lỗi','Dùng nét mặt chân thành; ký hiệu cụ thể có thể khác giữa cộng đồng và khu vực.'),s('Rất vui gặp bạn','Thực hiện theo cụm ý “vui” + “gặp” + “bạn”; cần xem video mẫu đã xác nhận.')]),
-      lesson('Đại từ','🫵',[s('Tôi','Chỉ nhẹ vào giữa ngực của mình.'),s('Bạn','Chỉ bằng ngón trỏ mở tự nhiên về phía người đối diện, tránh động tác gay gắt.'),s('Chúng ta','Chỉ mình rồi quét hướng bao gồm những người trong nhóm.'),s('Họ','Chỉ hoặc quét hướng về vị trí đại diện cho nhóm đã nhắc đến.'),s('Ai','Kết hợp ký hiệu chỉ người với nét mặt nghi vấn.')]),
-      lesson('Nguyên tắc học','🧠',[s('Tay thuận','Dùng tay thuận nhất quán; người thuận trái có thể thực hiện đối xứng.'),s('Vị trí','Cùng hình tay nhưng vị trí khác có thể tạo nghĩa khác.'),s('Chuyển động','Chú ý hướng, số lần lặp và tốc độ của động tác.'),s('Hình tay','Quan sát ngón nào mở, khép hoặc chạm nhau.'),s('Xác nhận','Luôn đối chiếu video từ người Điếc hoặc giáo viên VSL tại khu vực của bạn.')])]),
-    unit('Từ vựng thiết yếu','Gia đình, số đếm và cảm xúc',[
-      lesson('Gia đình','👨‍👩‍👧',[s('Gia đình','Hai tay tạo chuyển động bao quanh, biểu đạt một nhóm gắn kết; xem mẫu vùng miền.'),s('Mẹ','Ký hiệu chỉ người thân nữ; hình tay cụ thể thay đổi theo vùng.'),s('Bố','Ký hiệu chỉ người thân nam; hình tay cụ thể thay đổi theo vùng.'),s('Anh / em trai','Kết hợp dấu chỉ giới tính, tuổi hoặc thứ tự theo cách dùng địa phương.'),s('Chị / em gái','Kết hợp dấu chỉ giới tính, tuổi hoặc thứ tự theo cách dùng địa phương.')]),
-      lesson('Số 1–5','🔢',[s('Số 1','Giơ một ngón theo hệ số đếm đang học.'),s('Số 2','Giơ hai ngón theo hướng của mẫu địa phương.'),s('Số 3','Hình tay số ba có thể khác thói quen đếm thông thường; cần xem video mẫu.'),s('Số 4','Giơ bốn ngón theo hướng của mẫu địa phương.'),s('Số 5','Mở năm ngón, giữ lòng bàn tay theo hướng của mẫu địa phương.')]),
-      lesson('Cảm xúc','😊',[s('Vui','Nét mặt vui kết hợp chuyển động tay trước ngực theo mẫu.'),s('Buồn','Nét mặt và chuyển động hướng xuống thể hiện trạng thái buồn.'),s('Mệt','Thả vai và dùng chuyển động thể hiện cơ thể giảm năng lượng.'),s('Sợ','Nét mặt mở rộng mắt kết hợp chuyển động tay theo mẫu.'),s('Tức giận','Nét mặt căng và chuyển động có lực; không thực hiện quá gần người khác.')]),
-      lesson('Nhu cầu','💬',[s('Ăn','Đưa hình tay mô phỏng cầm thức ăn về phía miệng.'),s('Uống','Tạo hình như cầm cốc và đưa nhẹ về phía miệng.'),s('Ngủ','Kết hợp nét mặt nhắm mắt với chuyển động tay gần mặt.'),s('Muốn','Chuyển động tay kéo nhẹ về phía cơ thể theo mẫu.'),s('Không muốn','Kết hợp phủ định bằng đầu/nét mặt với ký hiệu “muốn”.')])]),
-    unit('Giao tiếp thực tế','Địa điểm, câu hỏi và tình huống cần trợ giúp',[
-      lesson('Địa điểm','🏙️',[s('Nhà','Mô tả hình mái hoặc không gian ở; ký hiệu địa phương có thể khác.'),s('Trường học','Kết hợp khái niệm học và địa điểm theo mẫu.'),s('Bệnh viện','Dùng ký hiệu y tế kết hợp địa điểm theo mẫu.'),s('Nhà vệ sinh','Một ký hiệu thiết yếu cần học trực tiếp từ video đúng vùng.'),s('Ở đâu','Dùng nét mặt nghi vấn cùng chuyển động tìm vị trí.')]),
-      lesson('Câu hỏi','❓',[s('Cái gì','Dùng nét mặt nghi vấn; vị trí trong câu khác tiếng Việt nói.'),s('Ai','Hướng dấu hỏi về người hoặc vị trí đại diện.'),s('Khi nào','Kết hợp dấu hỏi với khái niệm thời gian.'),s('Tại sao','Nét mặt nghi vấn là phần bắt buộc của câu hỏi.'),s('Như thế nào','Dùng chuyển động hỏi về cách thức theo mẫu địa phương.')]),
-      lesson('Trợ giúp','🆘',[s('Giúp tôi','Ký hiệu “giúp” hướng chuyển động về phía bản thân.'),s('Tôi không hiểu','Kết hợp “tôi” + “hiểu” + phủ định với nét mặt rõ.'),s('Làm lại','Yêu cầu người đối diện lặp lại ký hiệu chậm hơn.'),s('Chậm lại','Hai tay hạ tốc độ chuyển động để yêu cầu ký chậm.'),s('Gọi cấp cứu','Dùng ký hiệu trợ giúp và chỉ rõ người hoặc số liên hệ nếu có thể.')]),
-      lesson('Hội thoại ngắn','🤝',[s('Bạn tên gì?','Kết hợp “bạn” + “tên” + “gì”, giữ nét mặt nghi vấn.'),s('Tôi tên là…','Kết hợp “tôi” + “tên”, sau đó đánh vần hoặc dùng tên ký hiệu.'),s('Bạn khỏe không?','Kết hợp chỉ người + trạng thái khỏe + nét mặt nghi vấn.'),s('Tôi khỏe','Chỉ bản thân rồi thể hiện trạng thái khỏe/tốt.'),s('Hẹn gặp lại','Kết hợp ý “sau” + “gặp lại” theo mẫu vùng miền.')])]) ]}
+const COURSES = {
+  en: {
+    id:'en', name:'English B2–C1', flag:'🇬🇧', icon:'⚡', color:'#5b6ee1',
+    desc:'Workplace English, IT & cybersecurity, collocations, paraphrasing and real conversation.',
+    units:[
+      {
+        title:'Workplace Communication', subtitle:'Speak clearly and naturally at work', icon:'💼',
+        lessons:[
+          {title:'Give an update', tag:'Speaking', phrases:[
+            p('Here’s a quick update on where we are.','Đây là cập nhật nhanh về tiến độ hiện tại.','Dùng khi mở đầu phần báo cáo ngắn trong họp.','Let me bring you up to speed.'),
+            p('We’re on track to finish by Friday.','Chúng ta vẫn đúng tiến độ để hoàn thành trước thứ Sáu.','Dùng khi xác nhận tiến độ dự án.','Everything is moving according to plan.'),
+            p('We’ve run into a minor issue.','Chúng ta vừa gặp một vấn đề nhỏ.','Dùng khi báo cáo sự cố nhưng không muốn làm quá nghiêm trọng.','We’ve hit a small snag.'),
+            p('I’ll keep you posted.','Tôi sẽ tiếp tục cập nhật cho bạn.','Dùng khi tình hình chưa kết thúc.','I’ll let you know as soon as anything changes.'),
+            p('Could we circle back to this later?','Mình quay lại vấn đề này sau được không?','Dùng để hoãn một chủ đề trong cuộc họp.','Can we revisit this later?')
+          ]},
+          {title:'Clarify & confirm', tag:'Conversation', phrases:[
+            p('Just to make sure I understood correctly…','Để chắc là tôi hiểu đúng…','Dùng trước khi diễn đạt lại ý người khác.','If I understood you correctly…'),
+            p('Could you walk me through that?','Bạn có thể giải thích từng bước cho tôi không?','Dùng khi cần người khác giải thích quy trình.','Could you take me through it step by step?'),
+            p('What do you mean by that exactly?','Ý chính xác của bạn là gì?','Dùng khi một ý còn mơ hồ.','Could you clarify what you mean?'),
+            p('That makes sense.','Nghe hợp lý / Tôi hiểu rồi.','Dùng để xác nhận bạn đã hiểu.','Got it. That clears things up.'),
+            p('Are we all on the same page?','Mọi người đã cùng hiểu một ý chưa?','Dùng để kiểm tra sự thống nhất.','Does everyone agree on the next step?')
+          ]},
+          {title:'Professional disagreement', tag:'B2+', phrases:[
+            p('I see your point, but I look at it slightly differently.','Tôi hiểu ý bạn, nhưng tôi nhìn vấn đề hơi khác.','Phản biện lịch sự.','I understand where you’re coming from, but…'),
+            p('I’m not entirely convinced that’s the best approach.','Tôi chưa hoàn toàn bị thuyết phục rằng đó là cách tốt nhất.','Dùng khi không đồng ý nhưng muốn giữ giọng chuyên nghiệp.','I have some reservations about that approach.'),
+            p('That could work, although we should consider the risks.','Cách đó có thể hiệu quả, nhưng ta nên cân nhắc rủi ro.','Dùng để phản hồi cân bằng.','It’s a valid option, provided we address the risks.'),
+            p('Would it make more sense to…?','Liệu có hợp lý hơn nếu…?','Đưa ra phương án khác nhẹ nhàng.','What if we tried… instead?'),
+            p('Let’s weigh the pros and cons first.','Hãy cân nhắc ưu nhược điểm trước.','Khi cần tránh quyết định vội.','Let’s look at the trade-offs first.')
+          ]}
+        ]
+      },
+      {
+        title:'IT & Cybersecurity English', subtitle:'Explain technical work like a professional', icon:'🛡️',
+        lessons:[
+          {title:'Incident update', tag:'SOC', phrases:[
+            p('We detected multiple failed login attempts from the same IP address.','Chúng tôi phát hiện nhiều lần đăng nhập thất bại từ cùng một địa chỉ IP.','Dùng khi mô tả alert hoặc incident.','The same IP generated repeated authentication failures.'),
+            p('The activity appears suspicious, but we need more evidence.','Hoạt động có vẻ đáng ngờ nhưng cần thêm bằng chứng.','Dùng để tránh kết luận quá sớm.','It looks suspicious, although further investigation is required.'),
+            p('I checked the logs and found no sign of lateral movement.','Tôi đã kiểm tra log và chưa thấy dấu hiệu di chuyển ngang.','Dùng khi báo cáo kết quả điều tra.','The logs show no evidence of lateral movement.'),
+            p('We’ve isolated the affected endpoint.','Chúng tôi đã cô lập máy bị ảnh hưởng.','Dùng trong incident response.','The impacted host has been isolated from the network.'),
+            p('I’ll escalate this to the Tier 2 analyst.','Tôi sẽ chuyển vụ việc này lên analyst Tier 2.','Dùng khi cần escalation.','I’m escalating this case for further analysis.')
+          ]},
+          {title:'Explain a technical issue', tag:'IT', phrases:[
+            p('The service is up, but it isn’t reachable externally.','Dịch vụ đang chạy nhưng không thể truy cập từ bên ngoài.','Mô tả lỗi network/service.','The application is running, but external access is failing.'),
+            p('The issue seems to be related to DNS resolution.','Vấn đề có vẻ liên quan đến phân giải DNS.','Nêu giả thuyết kỹ thuật có dè dặt.','DNS resolution appears to be the likely cause.'),
+            p('I was able to reproduce the issue.','Tôi đã tái hiện được lỗi.','Khi xác nhận bug có thể tái tạo.','I managed to reproduce the problem on my end.'),
+            p('The workaround is temporary, not a permanent fix.','Giải pháp này chỉ tạm thời, không phải bản sửa lâu dài.','Phân biệt workaround và fix.','This is only a temporary workaround.'),
+            p('We should identify the root cause before making changes.','Ta nên xác định nguyên nhân gốc trước khi thay đổi.','Dùng khi troubleshooting.','Let’s find the root cause before we change anything.')
+          ]},
+          {title:'Present your project', tag:'Presentation', phrases:[
+            p('The main objective of this project is to…','Mục tiêu chính của dự án này là…','Mở đầu phần trình bày mục tiêu.','This project aims to…'),
+            p('Our approach consists of three main stages.','Phương pháp của nhóm gồm ba giai đoạn chính.','Giới thiệu quy trình.','We divided the process into three main stages.'),
+            p('One key challenge we faced was…','Một thách thức chính mà nhóm gặp phải là…','Dùng trong thuyết trình đồ án.','One of the biggest challenges was…'),
+            p('The results suggest that…','Kết quả cho thấy rằng…','Trình bày kết quả cẩn trọng.','Based on the results, we can see that…'),
+            p('To sum up, the system meets the core requirements.','Tóm lại, hệ thống đáp ứng các yêu cầu cốt lõi.','Kết luận presentation.','Overall, the system satisfies the main requirements.')
+          ]}
+        ]
+      },
+      {
+        title:'Natural English Upgrade', subtitle:'Move from “correct” English to natural B2–C1 English', icon:'🚀',
+        lessons:[
+          {title:'Stop translating word by word', tag:'Naturalness', phrases:[
+            p('I’m running a bit late.','Tôi đang đến muộn một chút.','Tự nhiên hơn “I will be late a little”.','I’m going to be a few minutes late.'),
+            p('It depends on the situation.','Còn tùy tình huống.','Collocation tự nhiên, không dịch sát từng chữ.','That really depends on the context.'),
+            p('I haven’t made up my mind yet.','Tôi vẫn chưa quyết định.','Tự nhiên hơn “I haven’t decided my mind”.','I’m still thinking it over.'),
+            p('That’s not really my thing.','Cái đó không hợp gu / không phải sở thích của tôi.','Hội thoại thân mật.','I’m not really into that.'),
+            p('I’ll take care of it.','Tôi sẽ xử lý việc đó.','Tự nhiên hơn “I will solve it” trong nhiều tình huống công việc.','Leave it with me.')
+          ]},
+          {title:'Linking ideas', tag:'Fluency', phrases:[
+            p('That being said, …','Tuy vậy / nói vậy nhưng…','Dùng để chuyển sang ý đối lập có cân nhắc.','Having said that, …'),
+            p('From my perspective, …','Theo góc nhìn của tôi…','Mở đầu quan điểm ở mức B2.','The way I see it, …'),
+            p('One reason for this is that…','Một lý do cho điều này là…','Mở rộng câu trả lời.','This is partly because…'),
+            p('A good example of this would be…','Một ví dụ điển hình là…','Đưa ví dụ tự nhiên.','Take … as an example.'),
+            p('In the long run, …','Về lâu dài…','Nói về tác động dài hạn.','Over the longer term, …')
+          ]},
+          {title:'Paraphrasing', tag:'C1 Skill', phrases:[
+            p('It helps people work faster.','Nó giúp mọi người làm việc nhanh hơn.','Câu gốc đơn giản để luyện nâng cấp.','It can significantly improve productivity.'),
+            p('The problem is very important.','Vấn đề này rất quan trọng.','Nâng cấp từ vựng chính xác hơn.','The issue is particularly significant.'),
+            p('Many people use AI now.','Hiện nay nhiều người sử dụng AI.','Paraphrase học thuật hơn.','AI adoption has become increasingly widespread.'),
+            p('This method has good and bad points.','Phương pháp này có điểm mạnh và điểm yếu.','Tránh “good/bad points”.','This approach has both advantages and limitations.'),
+            p('We need to fix this soon.','Ta cần xử lý việc này sớm.','Cách chuyên nghiệp hơn.','This issue should be addressed as soon as possible.')
+          ]}
+        ]
+      }
+    ]
+  },
+  zh: {
+    id:'zh', name:'中文 Chinese', flag:'🇨🇳', icon:'汉', color:'#df5147',
+    desc:'Practical Mandarin with pinyin, useful chunks and everyday speaking.',
+    units:[
+      {
+        title:'Giao tiếp nền tảng', subtitle:'Câu dùng được ngay thay vì học từ rời', icon:'🗣️',
+        lessons:[
+          {title:'Chào hỏi tự nhiên', tag:'HSK 1–2', phrases:[
+            z('你好！','Nǐ hǎo!','Xin chào!'),
+            z('好久不见！','Hǎo jiǔ bú jiàn!','Lâu rồi không gặp!'),
+            z('最近怎么样？','Zuìjìn zěnmeyàng?','Dạo này thế nào?'),
+            z('还不错。','Hái búcuò.','Cũng khá ổn.'),
+            z('认识你很高兴。','Rènshi nǐ hěn gāoxìng.','Rất vui được gặp bạn.')
+          ]},
+          {title:'Hỏi và làm rõ', tag:'Useful chunks', phrases:[
+            z('你是什么意思？','Nǐ shì shénme yìsi?','Ý bạn là gì?'),
+            z('你可以再说一遍吗？','Nǐ kěyǐ zài shuō yí biàn ma?','Bạn có thể nói lại lần nữa không?'),
+            z('请说慢一点。','Qǐng shuō màn yìdiǎn.','Vui lòng nói chậm một chút.'),
+            z('我不太明白。','Wǒ bú tài míngbai.','Tôi chưa hiểu lắm.'),
+            z('原来如此。','Yuánlái rúcǐ.','Ra là vậy.')
+          ]}
+        ]
+      },
+      {
+        title:'Học tập & công việc', subtitle:'Mandarin cho sinh viên và môi trường làm việc', icon:'💻',
+        lessons:[
+          {title:'Nói về việc học', tag:'HSK 2–3', phrases:[
+            z('我正在学习计算机安全。','Wǒ zhèngzài xuéxí jìsuànjī ānquán.','Tôi đang học an ninh máy tính.'),
+            z('这个问题有点难。','Zhège wèntí yǒudiǎn nán.','Vấn đề này hơi khó.'),
+            z('我需要再练习一下。','Wǒ xūyào zài liànxí yíxià.','Tôi cần luyện thêm một chút.'),
+            z('我已经完成了这个项目。','Wǒ yǐjīng wánchéng le zhège xiàngmù.','Tôi đã hoàn thành dự án này.'),
+            z('我们一起讨论一下吧。','Wǒmen yìqǐ tǎolùn yíxià ba.','Chúng ta cùng thảo luận nhé.')
+          ]},
+          {title:'Cập nhật công việc', tag:'Work', phrases:[
+            z('目前进展很顺利。','Mùqián jìnzhǎn hěn shùnlì.','Hiện tại tiến độ khá thuận lợi.'),
+            z('我们遇到了一个小问题。','Wǒmen yùdào le yí ge xiǎo wèntí.','Chúng tôi gặp một vấn đề nhỏ.'),
+            z('我正在检查原因。','Wǒ zhèngzài jiǎnchá yuányīn.','Tôi đang kiểm tra nguyên nhân.'),
+            z('我会尽快处理。','Wǒ huì jǐnkuài chǔlǐ.','Tôi sẽ xử lý sớm nhất có thể.'),
+            z('有消息我会告诉你。','Yǒu xiāoxi wǒ huì gàosu nǐ.','Có tin mới tôi sẽ báo bạn.')
+          ]}
+        ]
+      }
+    ]
+  }
 };
 
-function unit(title,subtitle,lessons){return{title,subtitle,lessons}}function lesson(title,icon,items){return{title,icon,items}}
-function w(word,meaning){return{word,meaning}}function z(word,pinyin,meaning){return{word,pinyin,meaning}}function s(word,motion){return{word,meaning:word,motion}}
+function p(text,vi,when,alt){ return {text,vi,when,alt}; }
+function z(text,pinyin,vi){ return {text,pinyin,vi,when:'Luyện như một cụm hoàn chỉnh.',alt:''}; }
 
-const DEFAULT_PROGRESS={xp:0,streak:0,lastPractice:null,completed:{en:[],zh:[],vsl:[]},dailyGoal:30,theme:'light'};
-const state={screen:'home',course:null,ref:null,session:null,settings:false,progress:loadProgress()};
+const AI_MODES = [
+  {id:'scenario',icon:'💼',title:'Tình huống công việc',desc:'10 câu thực tế + nghĩa + khi dùng + biến thể + lỗi hay gặp.'},
+  {id:'natural',icon:'✨',title:'Sửa câu Việt hóa',desc:'Biến câu đúng ngữ pháp thành cách nói tự nhiên hơn.'},
+  {id:'chat',icon:'💬',title:'Hội thoại 2 chiều',desc:'AI nói chuyện, sửa câu rồi tiếp tục hỏi để ép phản xạ.'},
+  {id:'phrases',icon:'🧩',title:'Học theo phrases',desc:'Học cụm từ và collocations thay vì từ đơn lẻ.'},
+  {id:'immersion',icon:'🌍',title:'English only',desc:'Môi trường 100% English ở mức B2–C1.'},
+  {id:'reading',icon:'📚',title:'Biến nội dung thành bài học',desc:'Đọc chủ đề yêu thích rồi trả lời câu hỏi bằng English.'}
+];
 
-function loadProgress(){try{const raw=localStorage.getItem('lingo_progress_v2');if(raw){const p=JSON.parse(raw);return{...DEFAULT_PROGRESS,...p,completed:{...DEFAULT_PROGRESS.completed,...(p.completed||{})}}}}catch(e){}return structuredCloneSafe(DEFAULT_PROGRESS)}
-function structuredCloneSafe(o){return JSON.parse(JSON.stringify(o))}function save(){try{localStorage.setItem('lingo_progress_v2',JSON.stringify(state.progress))}catch(e){toast('Không thể lưu tiến độ trên trình duyệt này.')}}
-function esc(value){return String(value??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
-function shuffle(a){a=[...a];for(let i=a.length-1;i;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function key(u,l){return`${u}-${l}`}function done(c,u,l){return state.progress.completed[c].includes(key(u,l))}
-function unlocked(c,u,l){if(u>0&&!DATA[c].units[u-1].lessons.every((_,i)=>done(c,u-1,i)))return false;return l===0||done(c,u,l-1)}
-function total(c){return DATA[c].units.reduce((n,u)=>n+u.lessons.length,0)}function completed(c){return state.progress.completed[c].length}
-function allItems(c){return DATA[c].units.flatMap(u=>u.lessons.flatMap(l=>l.items))}
-function cssCourse(c){const x=DATA[c];return`--course:${x.color};--course-soft:${x.soft}`}
-function todayKey(d=new Date()){return`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`}
-function applyTheme(){document.documentElement.dataset.theme=state.progress.theme||'light'}
-function nav(screen,course){state.screen=screen;if(course)state.course=course;state.settings=false;render();scrollTo({top:0,behavior:'smooth'})}
-function speak(text){const c=DATA[state.course];if(!c.tts||!('speechSynthesis'in window))return; speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang=c.tts;u.rate=.88;speechSynthesis.speak(u)}
+const STORAGE='learn_en_chi_v4';
+const DEFAULT={xp:0,streak:0,lastDate:null,completed:[],theme:'light',course:'en'};
+let progress=load();
+let view={page:'home',course:progress.course||'en',unit:0,lesson:0,mode:null};
 
-function shell(content,home=true){return`<main class="app-shell">${home?topbar():''}${content}</main>${state.settings?settingsModal():''}`}
-function topbar(){return`<header class="topbar"><button class="brand" data-nav="home" aria-label="Trang chủ"><span class="brand-mark">🗺️</span><span>Lối Đi Ngôn Ngữ</span></button><div class="top-actions"><div class="stats"><span class="pill">🔥 ${state.progress.streak}</span><span class="pill">⭐ ${state.progress.xp} XP</span></div><button class="icon-btn" data-settings aria-label="Cài đặt">⚙️</button></div></header>`}
-function renderHome(){const last=lastCourse();return shell(`<section class="hero"><div><div class="eyebrow">Mỗi ngày một bước nhỏ</div><h1>Học để kết nối,<br>không chỉ để ghi nhớ.</h1><p>Ba lộ trình, bài học ngắn và tiến độ được lưu ngay trên thiết bị của bạn.</p>${last?`<button class="btn btn-primary" data-course="${last}">Tiếp tục ${esc(DATA[last].name)} →</button>`:''}</div><div class="hero-art" aria-hidden="true">🧠</div></section><div class="daily-card"><div class="daily-icon">🎯</div><div><strong>Mục tiêu hôm nay</strong><small>Hoàn thành ${state.progress.dailyGoal} XP để duy trì thói quen.</small></div><div class="daily-progress">${Math.min(state.progress.xpToday||0,state.progress.dailyGoal)}/${state.progress.dailyGoal} XP</div></div><div class="section-head"><div><h2>Chọn lộ trình</h2><p>36 bài học từ nền tảng đến tình huống thực tế</p></div></div><section class="course-grid">${Object.entries(DATA).map(([id,c])=>courseCard(id,c)).join('')}</section>`)}
-function courseCard(id,c){const pct=Math.round(completed(id)/total(id)*100);return`<button class="course-card" style="${cssCourse(id)}" data-course="${id}"><div class="course-icon">${c.icon}</div><h3>${c.flag} ${esc(c.name)}</h3><p>${esc(c.desc)}</p><div class="progress-line"><i style="width:${pct}%"></i></div><div class="course-meta"><span>${completed(id)}/${total(id)} bài</span><span>${pct}%</span></div></button>`}
-function lastCourse(){return localStorage.getItem('lingo_last_course')||null}
+function load(){
+  try { return {...DEFAULT,...JSON.parse(localStorage.getItem(STORAGE)||'{}')}; }
+  catch { return {...DEFAULT}; }
+}
+function save(){ localStorage.setItem(STORAGE,JSON.stringify(progress)); }
+function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
+function key(c,u,l){return c+'-'+u+'-'+l;}
+function isDone(c,u,l){return progress.completed.includes(key(c,u,l));}
+function course(){return COURSES[view.course];}
+function applyTheme(){document.documentElement.dataset.theme=progress.theme;}
+function speak(text,lang){
+  if(!('speechSynthesis' in window)) return toast('Trình duyệt chưa hỗ trợ phát âm.');
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=.88;speechSynthesis.speak(u);
+}
+function setPage(page){view.page=page;render();scrollTo({top:0,behavior:'smooth'});}
 
-function renderPath(){const c=DATA[state.course];return shell(`<div class="subbar"><button class="back" data-nav="home">←</button><div class="grow"><h2>${c.flag} ${esc(c.name)}</h2></div></div><nav class="course-tabs">${Object.entries(DATA).map(([id,x])=>`<button class="course-tab ${id===state.course?'active':''}" style="--active:${x.color}" data-course="${id}">${x.flag} ${esc(x.name)}</button>`).join('')}</nav><div class="path-layout" style="${cssCourse(state.course)}"><section class="path-main">${c.units.map((u,ui)=>unitView(u,ui)).join('')}</section><aside class="side-card"><h3>${c.isSign?'Học bằng mắt và chuyển động':'Mẹo học nhanh'}</h3><p>${c.isSign?'Ngôn ngữ ký hiệu là một ngôn ngữ tự nhiên có ngữ pháp riêng. Hãy quan sát cả bàn tay, vị trí, chuyển động và nét mặt.':'Nghe lại từ mới, đọc thành tiếng và ôn đều mỗi ngày sẽ hiệu quả hơn học dồn.'}</p>${c.isSign?'<div class="notice"><strong>Lưu ý vùng miền</strong><br>Nội dung hiện là bản nhập môn tham khảo. Ký hiệu có thể khác giữa TP.HCM, Hà Nội và Hải Phòng. Các mô tả chuyển động cần được đối chiếu bằng video hoặc giáo viên/người Điếc tại địa phương.</div>':''}<button class="btn btn-primary" style="width:100%;margin-top:18px" data-practice>⚡ Luyện tập ngẫu nhiên</button></aside></div>`)}
-function unitView(u,ui){return`<article class="unit"><div class="unit-head"><div class="unit-no">${ui+1}</div><div><h3>${esc(u.title)}</h3><p>${esc(u.subtitle)}</p></div></div><div class="lesson-list">${u.lessons.map((l,li)=>{const d=done(state.course,ui,li),ok=unlocked(state.course,ui,li);return`<button class="lesson ${d?'done':''}" ${ok?'': 'disabled'} data-lesson="${ui}-${li}"><span class="lesson-badge">${d?'✅':ok?l.icon:'🔒'}</span><span><strong>${esc(l.title)}</strong><small>${l.items.length} thẻ học · ${ok?'Sẵn sàng':'Chưa mở khóa'}</small></span></button>`}).join('')}</div></article>`}
+function topbar(){
+ return `<header class="topbar">
+   <button class="brand" data-home><span class="brand-mark">🧭</span><span>LearnEN_CHI</span></button>
+   <nav class="nav">
+     <button data-home class="${view.page==='home'?'active':''}">Trang chủ</button>
+     <button data-coach class="${view.page==='coach'?'active':''}">AI Coach</button>
+   </nav>
+   <div class="top-actions"><span class="pill">🔥 ${progress.streak}</span><span class="pill">⭐ ${progress.xp} XP</span><button class="icon-btn" data-theme>${progress.theme==='dark'?'☀️':'🌙'}</button></div>
+ </header>`;
+}
 
-function startLesson(u,l,practice=false){state.ref={u,l};const items=practice?shuffle(allItems(state.course)).slice(0,10):DATA[state.course].units[u].lessons[l].items;state.session={items,phase:'learn',learnIndex:0,questions:[],idx:0,correct:0,wrong:0,hearts:5,answered:false,selected:null,practice};state.screen='lesson';localStorage.setItem('lingo_last_course',state.course);render();scrollTo(0,0)}
-function buildQuestions(items){const pool=allItems(state.course);return shuffle(items.map(item=>{const others=shuffle(pool.filter(x=>x.word!==item.word)).slice(0,3);const askMeaning=Math.random()>.5;return{item,askMeaning,options:shuffle([item,...others])}}))}
-function lessonTop(){const s=state.session;const progress=s.phase==='learn'?((s.learnIndex+1)/s.items.length)*45:45+((s.idx+(s.answered?1:0))/s.questions.length)*55;return`<div class="lesson-top"><button class="back" data-exit>✕</button><div class="lesson-progress"><i style="width:${progress}%"></i></div><div class="hearts">${'❤️'.repeat(s.hearts)}${'🖤'.repeat(5-s.hearts)}</div></div>`}
-function renderLesson(){const s=state.session;return s.phase==='learn'?renderLearn():renderQuiz()}
-function renderLearn(){const s=state.session,item=s.items[s.learnIndex],c=DATA[state.course];return shell(`<div class="lesson-shell" style="${cssCourse(state.course)}">${lessonTop()}<section class="learn-card"><div class="step-label">Thẻ học ${s.learnIndex+1}/${s.items.length}</div><h2>${c.isSign?'Quan sát và thực hành':'Làm quen từ mới'}</h2>${c.isSign?`<div class="media-placeholder"><div><span>🤟</span>Khung video VSL<br><small>Sẵn sàng gắn video đã được chuyên gia xác nhận</small></div></div>`:`<div class="word-main">${esc(item.word)}</div>${item.pinyin?`<div class="word-sub">${esc(item.pinyin)}</div>`:''}<div class="meaning">${esc(item.meaning)}</div>`}${item.motion?`<div class="motion"><strong>${esc(item.word)}</strong>${esc(item.motion)}</div>`:''}<div class="learn-nav">${c.tts?`<button class="speaker" data-speak aria-label="Nghe phát âm">🔊</button>`:''}<button class="btn btn-primary" data-next-learn>${s.learnIndex===s.items.length-1?'Bắt đầu kiểm tra':'Thẻ tiếp theo →'}</button></div></section></div>`,false)}
-function renderQuiz(){const s=state.session,q=s.questions[s.idx],c=DATA[state.course];const title=c.isSign?`Mô tả nào phù hợp với “${esc(q.item.word)}”?`:q.askMeaning?`“${esc(q.item.word)}” có nghĩa là gì?`:`Từ nào có nghĩa là “${esc(q.item.meaning)}”?`;return shell(`<div class="lesson-shell" style="${cssCourse(state.course)}">${lessonTop()}<section class="quiz-card"><div class="step-label">Câu ${s.idx+1}/${s.questions.length}</div><h2>${title}</h2>${q.item.pinyin&&!c.isSign?`<p class="word-sub">${esc(q.item.pinyin)}</p>`:''}<div class="answers">${q.options.map((o,i)=>answerButton(o,i,q)).join('')}</div>${s.answered?`<div class="feedback ${s.selected===q.item.word?'':'wrong'}">${s.selected===q.item.word?'✅ Chính xác!':'❌ Chưa đúng.'} Đáp án: ${esc(q.item.word)}${q.item.pinyin?' — '+esc(q.item.pinyin):''}<br><button class="btn btn-primary" data-next-question style="margin-top:12px">${s.idx===s.questions.length-1?'Xem kết quả':'Tiếp tục →'}</button></div>`:''}</section></div>`,false)}
-function answerButton(o,i,q){const s=state.session,c=DATA[state.course];let cls='answer';if(s.answered){if(o.word===q.item.word)cls+=' correct';else if(o.word===s.selected)cls+=' wrong'}const label=c.isSign?(o.motion||o.word):(q.askMeaning?o.meaning:o.word+(o.pinyin?` (${o.pinyin})`:''));return`<button class="${cls}" data-answer="${i}" ${s.answered?'disabled':''}>${esc(label)}</button>`}
-function choose(i){const s=state.session,q=s.questions[s.idx],o=q.options[i];if(s.answered)return;s.answered=true;s.selected=o.word;if(o.word===q.item.word)s.correct++;else{s.wrong++;s.hearts--}render()}
-function nextQuestion(){const s=state.session;if(s.hearts<=0){finish(false);return}if(s.idx>=s.questions.length-1){finish(true);return}s.idx++;s.answered=false;s.selected=null;render()}
-function finish(passed){const s=state.session;const first=!s.practice&&!done(state.course,state.ref.u,state.ref.l);if(passed&&first)state.progress.completed[state.course].push(key(state.ref.u,state.ref.l));const gain=passed?s.correct*10+(s.wrong===0?20:0):s.correct*5;state.progress.xp+=gain;const tk=todayKey();if(state.progress.lastPractice!==tk){const yd=new Date();yd.setDate(yd.getDate()-1);state.progress.streak=state.progress.lastPractice===todayKey(yd)?state.progress.streak+1:1;state.progress.lastPractice=tk;state.progress.xpToday=0}state.progress.xpToday=(state.progress.xpToday||0)+gain;s.gain=gain;s.passed=passed;save();state.screen='result';render();scrollTo(0,0)}
-function renderResult(){const s=state.session;return shell(`<div class="lesson-shell"><section class="result-card"><div class="result-emoji">${s.passed?'🎉':'💪'}</div><h2>${s.passed?'Hoàn thành bài học!':'Thử lại nhé!'}</h2><p>${s.passed?'Bạn vừa tiến thêm một bước trên lộ trình.':'Bạn đã hết tim, nhưng những câu vừa sai sẽ giúp bạn nhớ lâu hơn.'}</p><div class="result-stats"><div class="result-stat"><b>+${s.gain||0}</b><span>XP</span></div><div class="result-stat"><b>${s.correct}/${s.questions.length}</b><span>Đúng</span></div><div class="result-stat"><b>🔥 ${state.progress.streak}</b><span>Chuỗi ngày</span></div></div><div class="result-actions"><button class="btn btn-ghost" data-retry>Học lại</button><button class="btn btn-primary" data-nav="path">Về lộ trình</button></div></section></div>`,false)}
+function shell(content){return `<main class="app-shell">${topbar()}${content}</main>`;}
 
-function settingsModal(){return`<div class="settings" data-close-settings><section class="settings-card" role="dialog" aria-modal="true" aria-label="Cài đặt"><h2>Cài đặt</h2><div class="settings-row"><span>🌙 Giao diện tối</span><button class="btn btn-ghost" data-theme-toggle>${state.progress.theme==='dark'?'Đang bật':'Đang tắt'}</button></div><div class="settings-row"><span>🎯 Mục tiêu ngày</span><select data-goal><option value="20" ${state.progress.dailyGoal===20?'selected':''}>20 XP</option><option value="30" ${state.progress.dailyGoal===30?'selected':''}>30 XP</option><option value="50" ${state.progress.dailyGoal===50?'selected':''}>50 XP</option></select></div><div class="settings-row"><span class="danger">Xóa toàn bộ tiến độ</span><button class="btn btn-ghost danger" data-reset>Xóa</button></div><button class="btn btn-primary" data-close style="width:100%;margin-top:14px">Đóng</button></section></div>`}
-function toast(msg){document.querySelector('.toast')?.remove();const e=document.createElement('div');e.className='toast';e.textContent=msg;document.body.append(e);setTimeout(()=>e.remove(),2600)}
-function render(){applyTheme();const app=document.querySelector('#app');if(state.screen==='home')app.innerHTML=renderHome();else if(state.screen==='path')app.innerHTML=renderPath();else if(state.screen==='lesson')app.innerHTML=renderLesson();else app.innerHTML=renderResult();bind()}
-function bind(){document.querySelectorAll('[data-nav]').forEach(b=>b.onclick=()=>nav(b.dataset.nav,state.course));document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>nav('path',b.dataset.course));document.querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>{const[u,l]=b.dataset.lesson.split('-').map(Number);startLesson(u,l)});document.querySelector('[data-practice]')?.addEventListener('click',()=>startLesson(0,0,true));document.querySelector('[data-settings]')?.addEventListener('click',()=>{state.settings=true;render()});document.querySelector('[data-close]')?.addEventListener('click',()=>{state.settings=false;render()});document.querySelector('[data-close-settings]')?.addEventListener('click',e=>{if(e.target===e.currentTarget){state.settings=false;render()}});document.querySelector('[data-theme-toggle]')?.addEventListener('click',()=>{state.progress.theme=state.progress.theme==='dark'?'light':'dark';save();render()});document.querySelector('[data-goal]')?.addEventListener('change',e=>{state.progress.dailyGoal=Number(e.target.value);save();toast('Đã đổi mục tiêu ngày')});document.querySelector('[data-reset]')?.addEventListener('click',()=>{if(confirm('Xóa toàn bộ XP và tiến độ học?')){state.progress=structuredCloneSafe(DEFAULT_PROGRESS);save();state.settings=false;render()}});document.querySelector('[data-exit]')?.addEventListener('click',()=>nav('path',state.course));document.querySelector('[data-speak]')?.addEventListener('click',()=>speak(state.session.items[state.session.learnIndex].word));document.querySelector('[data-next-learn]')?.addEventListener('click',()=>{const s=state.session;if(s.learnIndex<s.items.length-1)s.learnIndex++;else{s.questions=buildQuestions(s.items);s.phase='quiz'}render()});document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>choose(Number(b.dataset.answer)));document.querySelector('[data-next-question]')?.addEventListener('click',nextQuestion);document.querySelector('[data-retry]')?.addEventListener('click',()=>startLesson(state.ref?.u||0,state.ref?.l||0,state.session.practice))}
+function home(){
+ const en=COURSES.en, zh=COURSES.zh;
+ return shell(`
+ <section class="hero">
+   <div>
+     <div class="eyebrow">B2 → C1 REAL-WORLD LANGUAGE TRAINING</div>
+     <h1>Học để <span>nói được</span>,<br>không chỉ để nhớ.</h1>
+     <p>English cho công việc, IT/cybersecurity, thuyết trình và phản xạ. Chinese học theo cụm dùng được ngay.</p>
+     <div class="hero-actions"><button class="btn primary" data-course="en">Bắt đầu English B2–C1 →</button><button class="btn glass" data-coach>🤖 Luyện với AI Coach</button></div>
+   </div>
+   <div class="hero-visual"><div>Talk</div><strong>B2+</strong><small>Think • Explain • Paraphrase</small></div>
+ </section>
 
+ <section class="method-strip">
+   <div><b>01</b><span>Real situations</span></div><div><b>02</b><span>Natural English</span></div>
+   <div><b>03</b><span>Collocations</span></div><div><b>04</b><span>Paraphrasing</span></div>
+ </section>
+
+ <div class="section-head"><div><div class="eyebrow dark">LEARNING PATHS</div><h2>Chọn lộ trình</h2></div><p>Bỏ học lan man. Mỗi bài tập trung vào ngôn ngữ bạn thật sự có thể dùng.</p></div>
+ <section class="course-grid">
+   ${courseCard(en)}${courseCard(zh)}
+ </section>
+
+ <div class="section-head"><div><div class="eyebrow dark">B2–C1 TRAINING</div><h2>6 cách luyện với AI</h2></div><button class="link-btn" data-coach>Xem AI Coach →</button></div>
+ <section class="mode-grid">${AI_MODES.map(m=>`<button class="mode-card" data-mode="${m.id}"><span>${m.icon}</span><h3>${m.title}</h3><p>${m.desc}</p></button>`).join('')}</section>
+ `);
+}
+function courseCard(c){
+ const done=progress.completed.filter(x=>x.startsWith(c.id+'-')).length;
+ const total=c.units.reduce((n,u)=>n+u.lessons.length,0);
+ const pct=Math.round(done/total*100);
+ return `<button class="course-card" style="--course:${c.color}" data-course="${c.id}">
+   <div class="course-icon">${c.icon}</div><div class="course-kicker">${c.flag} ${c.id==='en'?'ADVANCED TRACK':'PRACTICAL TRACK'}</div>
+   <h3>${c.name}</h3><p>${c.desc}</p>
+   <div class="progress"><i style="width:${pct}%"></i></div><div class="meta"><span>${done}/${total} bài</span><span>${pct}%</span></div>
+ </button>`;
+}
+
+function path(){
+ const c=course();
+ return shell(`
+ <section class="path-head" style="--course:${c.color}">
+  <button class="round" data-home>←</button>
+  <div><div class="eyebrow dark">${c.flag} LEARNING PATH</div><h1>${c.name}</h1><p>${c.desc}</p></div>
+  <div class="level-badge">${c.id==='en'?'B2–C1':'实用中文'}</div>
+ </section>
+ <div class="course-switch"><button data-course="en" class="${view.course==='en'?'active':''}">🇬🇧 English B2–C1</button><button data-course="zh" class="${view.course==='zh'?'active':''}">🇨🇳 中文 Chinese</button></div>
+ <section class="path-layout">
+   <div class="units">${c.units.map((u,ui)=>unitCard(u,ui)).join('')}</div>
+   <aside class="side-panel">
+     <div class="side-icon">🎯</div><h3>${c.id==='en'?'B2+ rule':'学习方法'}</h3>
+     <p>${c.id==='en'?'Đừng chỉ trả lời đúng. Hãy giải thích lý do, đưa ví dụ, so sánh và paraphrase cùng một ý theo cách khác.':'Học cả cụm câu, nghe pinyin, đọc thành tiếng và lặp lại trong ngữ cảnh.'}</p>
+     <button class="btn primary wide" data-coach>🤖 Mở AI Coach</button>
+   </aside>
+ </section>`);
+}
+function unitCard(u,ui){
+ return `<article class="unit-card">
+   <div class="unit-title"><span>${u.icon}</span><div><div class="eyebrow dark">UNIT ${String(ui+1).padStart(2,'0')}</div><h2>${u.title}</h2><p>${u.subtitle}</p></div></div>
+   <div class="lesson-grid">${u.lessons.map((l,li)=>`<button class="lesson-card ${isDone(view.course,ui,li)?'done':''}" data-lesson="${ui}-${li}">
+     <div><span class="tag">${l.tag}</span><h3>${l.title}</h3><p>${l.phrases.length} useful phrases</p></div><b>${isDone(view.course,ui,li)?'✓':'→'}</b>
+   </button>`).join('')}</div>
+ </article>`;
+}
+
+function lesson(){
+ const c=course(), l=c.units[view.unit].lessons[view.lesson];
+ return shell(`
+ <section class="lesson-head" style="--course:${c.color}">
+   <button class="round" data-back-path>←</button>
+   <div><div class="eyebrow dark">${c.units[view.unit].title} • ${l.tag}</div><h1>${l.title}</h1><p>Học cả cụm, hiểu ngữ cảnh, rồi nói lại thành tiếng.</p></div>
+   <button class="btn primary" data-complete>${isDone(view.course,view.unit,view.lesson)?'✓ Đã hoàn thành':'Hoàn thành +30 XP'}</button>
+ </section>
+ <section class="phrase-list">
+  ${l.phrases.map((x,i)=>phraseCard(x,i,c.id)).join('')}
+ </section>
+ <section class="challenge">
+   <div><div class="eyebrow dark">ACTIVE RECALL</div><h2>Đừng chỉ đọc — hãy tự nói lại</h2><p>${c.id==='en'?'Chọn 2 câu phía trên. Nói lại cùng ý bằng từ của bạn, sau đó mở AI Coach để được sửa grammar, vocabulary, naturalness và clarity.':'Chọn 2 câu phía trên, đọc thành tiếng rồi thử thay đổi chủ ngữ hoặc tình huống.'}</p></div>
+   <button class="btn primary" data-coach>Practice with AI →</button>
+ </section>`);
+}
+function phraseCard(x,i,cid){
+ return `<article class="phrase-card">
+   <div class="phrase-no">${String(i+1).padStart(2,'0')}</div>
+   <div class="phrase-main">
+     <div class="phrase-top"><h2>${esc(x.text)}</h2><button class="speaker" data-speak="${esc(x.text)}">🔊</button></div>
+     ${x.pinyin?`<div class="pinyin">${esc(x.pinyin)}</div>`:''}
+     <div class="translation">${esc(x.vi)}</div>
+     ${cid==='en'?`<div class="phrase-info"><div><b>Khi nào dùng</b><p>${esc(x.when)}</p></div><div><b>Biến thể tự nhiên</b><p>${esc(x.alt)}</p></div></div>`:''}
+   </div>
+ </article>`;
+}
+
+function coach(){
+ const selected=AI_MODES.find(x=>x.id===view.mode)||AI_MODES[0];
+ return shell(`
+ <section class="coach-hero">
+   <div><div class="eyebrow">AI SPEAKING COACH • B2–C1</div><h1>Biến AI thành gia sư<br>khó tính vừa đủ.</h1><p>Chọn kiểu luyện, chủ đề bạn muốn và copy prompt hoàn chỉnh sang ChatGPT.</p></div>
+   <div class="coach-score"><strong>B2+</strong><span>Grammar</span><span>Vocabulary</span><span>Naturalness</span><span>Clarity</span></div>
+ </section>
+ <section class="coach-layout">
+   <div class="coach-modes">${AI_MODES.map(m=>`<button class="${selected.id===m.id?'active':''}" data-mode="${m.id}"><span>${m.icon}</span><div><b>${m.title}</b><small>${m.desc}</small></div></button>`).join('')}</div>
+   <div class="prompt-panel">
+      <div class="prompt-head"><div><div class="eyebrow dark">CUSTOM PROMPT</div><h2>${selected.icon} ${selected.title}</h2></div></div>
+      <label>Chủ đề muốn luyện<input id="topic" value="${selected.id==='scenario'?'SOC analyst incident update':'Technology and cybersecurity'}" placeholder="VD: job interview, SOC, AI, university project"></label>
+      <label>Câu của bạn / tình huống cụ thể<textarea id="inputText" placeholder="Có thể để trống hoặc nhập câu tiếng Anh bạn muốn sửa."></textarea></label>
+      <div class="prompt-box" id="promptBox">${esc(buildPrompt(selected.id,'Technology and cybersecurity',''))}</div>
+      <div class="prompt-actions"><button class="btn secondary" data-generate>Tạo lại prompt</button><button class="btn primary" data-copy>📋 Copy prompt</button></div>
+      <div class="coach-tip"><b>💡 Mẹo B2–C1:</b> Sau mỗi câu trả lời, bắt AI yêu cầu bạn paraphrase lại một lần. Đây là phần giúp tăng phản xạ và vốn diễn đạt nhanh nhất.</div>
+   </div>
+ </section>`);
+}
+
+function buildPrompt(mode,topic,input){
+ const base=`Bạn là gia sư tiếng Anh B2–C1 cho tôi. Chủ đề: ${topic||'Technology and workplace communication'}.
+
+Mục tiêu: giao tiếp tự nhiên, dùng collocations tốt, giải thích ý rõ ràng và paraphrase được cùng một ý theo nhiều cách.
+Khi tôi trả lời, hãy đánh giá ngắn gọn 4 mục: Grammar, Vocabulary, Naturalness, Clarity. Sửa lỗi, cho phiên bản tự nhiên hơn ở mức B2–C1, rồi yêu cầu tôi nói/viết lại trước khi tiếp tục. Nếu tôi bí từ, hãy gợi ý bằng English trước, chỉ dùng tiếng Việt khi cần.`;
+ const extra={
+ scenario:`Tạo 10 câu người bản xứ thường dùng trong tình huống này. Với mỗi câu: nghĩa tiếng Việt tự nhiên, khi nào dùng, một biến thể khác, và lỗi người Việt thường mắc. Sau đó chọn 3 câu để bắt đầu role-play.`,
+ natural:`Tôi sẽ đưa các câu tiếng Anh tôi thường nói. Hãy chỉ ra phần “đậm mùi dịch từ tiếng Việt”, sửa thành cách tự nhiên hơn và giải thích collocation/cách diễn đạt. Câu cần sửa: ${input||'[tôi sẽ gửi sau]'}`,
+ chat:`Đóng vai người bản xứ và bắt đầu hội thoại 2 chiều. Mỗi lượt chỉ hỏi 1 câu. Sau câu trả lời của tôi: sửa lỗi, nâng cấp cách nói, bắt tôi paraphrase rồi mới tiếp tục.`,
+ phrases:`Tạo 20 phrases/collocations thông dụng về chủ đề này. Không dạy từ đơn lẻ. Với mỗi cụm: nghĩa, ví dụ thực tế và hoàn cảnh sử dụng. Sau mỗi 5 cụm hãy cho một mini challenge.`,
+ immersion:`Từ bây giờ chỉ nói với tôi bằng English ở mức B2–C1. Nếu tôi sai, sửa ngay nhưng ngắn gọn. Nếu câu đúng nhưng quá cơ bản, hãy nâng cấp bằng collocation, phrasal verb hoặc từ chính xác hơn. Không dịch sang tiếng Việt trừ khi tôi yêu cầu.`,
+ reading:`Viết một đoạn English 180–250 từ về chủ đề này ở mức B2–C1. Sau đó giải thích 8 phrases/collocations quan trọng và đặt 5 câu hỏi từ dễ đến khó để tôi trả lời bằng English. Sau mỗi câu trả lời hãy sửa và yêu cầu paraphrase.`
+ };
+ return base+'\n'+extra[mode];
+}
+
+function completeLesson(){
+ const k=key(view.course,view.unit,view.lesson);
+ if(progress.completed.includes(k)) return toast('Bài này đã được tính XP rồi.');
+ progress.completed.push(k);progress.xp+=30;
+ const today=new Date().toDateString();
+ if(progress.lastDate!==today){
+   const y=new Date(Date.now()-86400000).toDateString();
+   progress.streak=progress.lastDate===y?progress.streak+1:1;
+   progress.lastDate=today;
+ }
+ save();render();toast('+30 XP • Nice work!');
+}
+
+function toast(msg){const old=document.querySelector('.toast');if(old)old.remove();const e=document.createElement('div');e.className='toast';e.textContent=msg;document.body.appendChild(e);setTimeout(()=>e.remove(),2200);}
+
+function bind(){
+ document.querySelectorAll('[data-home]').forEach(b=>b.onclick=()=>{view.page='home';render();});
+ document.querySelectorAll('[data-course]').forEach(b=>b.onclick=()=>{view.course=b.dataset.course;progress.course=view.course;save();view.page='path';render();scrollTo(0,0);});
+ document.querySelectorAll('[data-lesson]').forEach(b=>b.onclick=()=>{[view.unit,view.lesson]=b.dataset.lesson.split('-').map(Number);view.page='lesson';render();scrollTo(0,0);});
+ document.querySelectorAll('[data-back-path]').forEach(b=>b.onclick=()=>setPage('path'));
+ document.querySelectorAll('[data-coach]').forEach(b=>b.onclick=()=>{view.page='coach';render();scrollTo(0,0);});
+ document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{view.mode=b.dataset.mode;view.page='coach';render();scrollTo(0,0);});
+ document.querySelectorAll('[data-speak]').forEach(b=>b.onclick=()=>speak(b.dataset.speak,view.course==='zh'?'zh-CN':'en-US'));
+ document.querySelector('[data-complete]')?.addEventListener('click',completeLesson);
+ document.querySelector('[data-theme]')?.addEventListener('click',()=>{progress.theme=progress.theme==='dark'?'light':'dark';save();applyTheme();render();});
+ document.querySelector('[data-generate]')?.addEventListener('click',()=>{
+   const m=view.mode||'scenario', t=document.querySelector('#topic').value, i=document.querySelector('#inputText').value;
+   document.querySelector('#promptBox').textContent=buildPrompt(m,t,i);
+ });
+ document.querySelector('[data-copy]')?.addEventListener('click',async()=>{
+   const t=document.querySelector('#promptBox').textContent;
+   try{await navigator.clipboard.writeText(t);toast('Đã copy prompt!');}
+   catch{toast('Không copy tự động được — hãy chọn và copy thủ công.');}
+ });
+}
+
+function render(){
+ applyTheme();
+ const app=document.querySelector('#app');
+ if(view.page==='home')app.innerHTML=home();
+ else if(view.page==='path')app.innerHTML=path();
+ else if(view.page==='lesson')app.innerHTML=lesson();
+ else app.innerHTML=coach();
+ bind();
+}
 applyTheme();render();
